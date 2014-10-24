@@ -6,6 +6,19 @@ from CMGTools.RootTools.RootTools import *
 from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 
 ##------------------------------------------
+## Choose the type of cut flow
+## Signal or control sample
+##------------------------------------------
+
+cutFlow = 'Signal'
+#cutFlow = 'SingleMu'
+#cutFlow = 'DoubleMu'
+#cutFlow = 'SinglePhoton'
+#cutFlow = 'SingleEle'
+#cutFlow = 'DoubleEle'
+#cutFlow = 'MultiJetEnriched'
+
+##------------------------------------------
 ## Redefine analyzer parameters
 ##------------------------------------------
 
@@ -89,12 +102,8 @@ ttHIsoTrackAna = cfg.Analyzer(
 ##  ALPHAT VARIABLES
 ##------------------------------------------
 
-ttHAlphaTSkim = cfg.Analyzer(
-            'ttHAlphaTSkimmer',
-            forwardJetVeto = True,
-            alphaTCuts = [(0.65, 200, 275),   #AlphaT cut in HT region
-                          (0.60, 275, 325),   #(aT, HTlow, HThigh)
-                          (0.55, 325, 99999)],#Any region not specified will be vetoed
+ttHAlphaTAna = cfg.Analyzer(
+            'ttHAlphaTVarAnalyzer'
             )
 
 ##------------------------------------------
@@ -117,13 +126,33 @@ ttHJetMETSkim.htCut       = ('htJet40j', 200)
 ttHJetMETSkim.mhtCut      = ('mhtJet40j', 0)
 ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
 
-#Leptons (currently allowing none)
-ttHLepSkim.maxLeptons     = 0
-ttHLepSkim.minLeptons     = 0
+#Leptons
+if cutFlow=='Signal' or cutFlow=='SinglePhoton' or cutFlow=='MultJetEnriched':
+    ttHLepSkim.maxLeptons     = 0
+    ttHLepSkim.minLeptons     = 0
+elif cutFlow=='SingleMu':
+    ttHLepSkim.maxLeptons     = 1
+    ttHLepSkim.minLeptons     = 1
+elif cutFlow=='DoubleMu':
+    ttHLepSkim.maxLeptons     = 2
+    ttHLepSkim.minLeptons     = 2
 
 #AlphaT Specific cuts
-ttHAlphaTAna = cfg.Analyzer(
-            'ttHAlphaTVarAnalyzer'
+
+#Is it multijet
+if cutFlow=='MultiJetEnriched':
+    isMultiJet=True 
+else:
+    isMultiJet=False
+
+ttHAlphaTSkim = cfg.Analyzer(
+            'ttHAlphaTSkimmer',
+            forwardJetVeto = True,
+            alphaTCuts = [(0.65, 200, 275),   #AlphaT cut in HT region
+                          (0.60, 275, 325),   #(aT, HTlow, HThigh)
+                          (0.55, 325, 99999)],#Any region not specified will be vetoed
+            invertAlphaT = isMultiJet,
+            mhtDivMetCut = ('mhtJet40j','met',1.25),
             )
 
 ##------------------------------------------
