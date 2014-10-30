@@ -228,7 +228,7 @@ test = 1
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
-    comp               = TTHToWW_PUS14
+    comp               = T1tttt_PU20bx25
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
