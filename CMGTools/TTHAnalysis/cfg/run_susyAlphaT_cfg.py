@@ -10,10 +10,10 @@ from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 ## Signal or control sample
 ##------------------------------------------
 
-cutFlow = 'Signal'
+#cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-#cutFlow = 'DoubleMu'
-#cutFlow = 'SinglePhoton'
+#  cutFlow = 'DoubleMu'
+cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
@@ -120,30 +120,27 @@ ttHAlphaTAna = cfg.Analyzer(
 # NOTE: Currently energy sums are calculated with 40 GeV jets (ttHCoreEventAnalyzer.py)
 #       However, the input collection is cleanjets which have a 50 GeV cut so this is a labeling problem
 
+#Start with the signal region default cut flow
+
 #ESums
 ttHJetMETSkim.jetPtCuts   = [100,100] # require the lead two jets to be above 100GeV
 ttHJetMETSkim.htCut       = ('htJet40j', 200)
 ttHJetMETSkim.mhtCut      = ('mhtJet40j', 0)
 ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
 
-#Leptons
-if cutFlow=='Signal' or cutFlow=='SinglePhoton' or cutFlow=='MultJetEnriched':
-    ttHLepSkim.maxLeptons     = 0
-    ttHLepSkim.minLeptons     = 0
-elif cutFlow=='SingleMu':
-    ttHLepSkim.maxLeptons     = 1
-    ttHLepSkim.minLeptons     = 1
-elif cutFlow=='DoubleMu':
-    ttHLepSkim.maxLeptons     = 2
-    ttHLepSkim.minLeptons     = 2
+ttHLepSkim.maxLeptons     = 0
+ttHLepSkim.minLeptons     = 0
+
+#Photons
+ttHPhotonSkim = cfg.Analyzer(
+    'ttHPhotonSkimmer',
+    minPhotons = 0,
+    maxPhotons = 0,
+    #idCut  = "photon.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the photons
+    )
 
 #AlphaT Specific cuts
-
-#Is it multijet
-if cutFlow=='MultiJetEnriched':
-    isMultiJet=True 
-else:
-    isMultiJet=False
 
 ttHAlphaTSkim = cfg.Analyzer(
             'ttHAlphaTSkimmer',
@@ -151,9 +148,40 @@ ttHAlphaTSkim = cfg.Analyzer(
             alphaTCuts = [(0.65, 200, 275),   #AlphaT cut in HT region
                           (0.60, 275, 325),   #(aT, HTlow, HThigh)
                           (0.55, 325, 99999)],#Any region not specified will be vetoed
-            invertAlphaT = isMultiJet,
-            mhtDivMetCut = ('mhtJet40j','met',1.25),
+            invertAlphaT = False, #Invert the alphaT requirement
+            mhtDivMetCut = ('mhtJet40j','met',1.25), #MHT/MET cut
             )
+
+
+# (FIXME Instead of everything here, have an alphaT core file (like susyCore) which
+# does the selection and cutflow. Then have the rest of this file below)
+
+# Modify the cuts for the control regions
+if cutFlow=='SingleMu':
+    ttHLepSkim.maxLeptons     = 1
+    ttHLepSkim.minLeptons     = 1
+
+elif cutFlow=='DoubleMu':
+    ttHLepSkim.maxLeptons     = 2
+    ttHLepSkim.minLeptons     = 2
+
+elif cutFlow=='SinglePhoton':
+    ttHPhotonSkim.minPhotons  = 0
+    ttHPhotonSkim.maxPhotons  = 9999
+    ttHPhotonSkim.idCut = "photon.eta < 1.45"
+    ttHPhotonSkim.ptCuts = [165]
+
+elif cutFlow=='SingleEle':
+    ttHLepSkim.maxLeptons     = 1
+    ttHLepSkim.minLeptons     = 1
+
+elif cutFlow=='DoubleEle':
+    ttHLepSkim.maxLeptons     = 2
+    ttHLepSkim.minLeptons     = 2
+
+elif cutFlow=='MultiJetEnriched':
+    ttHAlphaTSkim.invertAlphaT = True
+
 
 ##------------------------------------------
 ##  PRODUCER
@@ -218,6 +246,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
                         ttHIsoTrackAna,
                         ttHAlphaTAna,
                         ttHAlphaTSkim,
+                        ttHPhotonSkim,
                         treeProducer,
                         ])
 
@@ -229,6 +258,8 @@ test = 1
 #--------------------------------------------------
 if test==1:
     comp               = T1tttt_PU20bx25
+    if cutFlow == 'SinglePhoton':
+        comp = VBFHGG_PU20bx25
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
@@ -248,6 +279,7 @@ elif test==2:
 #--------------------------------------------------
 elif test==4:
     comp = TTJets_PU20bx25
+
 #    comp.name = 'TTJets'
     #    comp.files = [ '/store/mc/Spring14miniaod/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/063013AD-9907-E411-8135-0026189438BD.root' ]
 
