@@ -12,11 +12,12 @@ from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-#  cutFlow = 'DoubleMu'
+#cutFlow = 'DoubleMu'
 cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
+#cutFlow = 'Test'
 
 ##------------------------------------------
 ## Redefine analyzer parameters
@@ -48,8 +49,8 @@ ttHLepAna.ele_tightId                 = "Cuts_2012"
 
 # Photons
 #------------------------------
-ttHPhoAna.ptMin                       = 25,
-ttHPhoAna.etaMax                      = 2.5,
+ttHPhoAna.ptMin                       = 25
+ttHPhoAna.etaMax                      = 2.5
 ttHPhoAna.gammaID                     = "PhotonCutBasedIDLoose"
 
 # Taus 
@@ -166,10 +167,11 @@ elif cutFlow=='DoubleMu':
     ttHLepSkim.minLeptons     = 2
 
 elif cutFlow=='SinglePhoton':
-    ttHPhotonSkim.minPhotons  = 0
+    ttHPhotonSkim.minPhotons  = 1
     ttHPhotonSkim.maxPhotons  = 9999
-    ttHPhotonSkim.idCut = "photon.eta < 1.45"
-    ttHPhotonSkim.ptCuts = [165]
+    ttHAlphaTSkim.invertAlphaT = True
+    ttHPhotonSkim.idCut = "abs(photon.eta()) < 1.0"
+    ttHPhotonSkim.ptCuts = [25]
 
 elif cutFlow=='SingleEle':
     ttHLepSkim.maxLeptons     = 1
@@ -182,6 +184,13 @@ elif cutFlow=='DoubleEle':
 elif cutFlow=='MultiJetEnriched':
     ttHAlphaTSkim.invertAlphaT = True
 
+elif cutFlow=='Test':
+    ttHLepSkim.maxLeptons     = 99
+    ttHLepSkim.minLeptons     = 0
+    ttHAlphaTSkim.invertAlphaT = True
+    ttHPhotonSkim.minPhotons  = 0
+    ttHPhotonSkim.maxPhotons  = 9999
+    ttHPhotonSkim.ptCuts = [25]
 
 ##------------------------------------------
 ##  PRODUCER
@@ -258,8 +267,10 @@ test = 1
 #--------------------------------------------------
 if test==1:
     comp               = T1tttt_PU20bx25
+    if cutFlow == 'Test':
+        comp = VBFHGG_PU20bx25 
     if cutFlow == 'SinglePhoton':
-        comp = VBFHGG_PU20bx25
+        comp = VBFHGG_PU20bx25 
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
