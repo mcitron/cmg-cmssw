@@ -3,7 +3,7 @@ from CMGTools.TTHAnalysis.analyzers.treeProducerSusyCore import *
 class treeProducerSusyAlphaT( treeProducerSusyCore ):
 
     #-----------------------------------
-    # TREE PRODUCER FOR SUSY MULTILEPTONS
+    # TREE PRODUCER FOR SUSY ALPHAT
     #-----------------------------------
     def __init__(self, cfg_ana, cfg_comp, looperName):
         super(treeProducerSusyAlphaT,self).__init__(cfg_ana, cfg_comp, looperName)
@@ -57,10 +57,11 @@ class treeProducerSusyAlphaT( treeProducerSusyCore ):
             # NTupleVariable("pt2l",          lambda ev: ev.pt2l,      help="p_{T}(ll)"),
             # NTupleVariable("m2l",           lambda ev: ev.m2l,       help="m(ll)"),
 
+            # mT_W variables
             ##--------------------------------------------------
-            #            NTupleVariable("mtw", lambda ev: ev.mtw, int, help="mt(l,met)"),
-            #            NTupleVariable("mtwTau", lambda ev: ev.mtwTau, int, help="mt(tau,met)"),
-            #            NTupleVariable("IsoTrack_mtw", lambda ev: ev.mtwIsoTrack, int, help="mt(isoTrack,met)"),
+            NTupleVariable("mtw", lambda ev: ev.mtw, int, help="mt(l,met)"),
+            NTupleVariable("mtwTau", lambda ev: ev.mtwTau, int, help="mt(tau,met)"),
+            NTupleVariable("IsoTrack_mtw", lambda ev: ev.mtwIsoTrack, int, help="mt(isoTrack,met)"),
             ##--------------------------------------------------
             #            NTupleVariable("minMWjj", lambda ev: ev.minMWjj, int, help="minMWjj"),
             #            NTupleVariable("minMWjjPt", lambda ev: ev.minMWjjPt, int, help="minMWjjPt"),
@@ -84,6 +85,9 @@ class treeProducerSusyAlphaT( treeProducerSusyCore ):
             "selectedPhotons"  : NTupleCollection("gamma",    photonTypeSusy,           50, help="photons with pt > 25 and loose cut based ID"),
             "selectedIsoTrack" : NTupleCollection("isoTrack", isoTrackType,             50, help="isoTrack, sorted by pt"),
             "genParticles"     : NTupleCollection("genPart",  genParticleWithMotherId, 200, help="all pruned genparticles"),
+
+            # add stuff for testing
+            "selectedMuons" : NTupleCollection("muon", leptonTypeSusy, 50, help="Muons for testing"),
             })
         
         ## Book the variables, but only if we're called explicitly and not through a base class

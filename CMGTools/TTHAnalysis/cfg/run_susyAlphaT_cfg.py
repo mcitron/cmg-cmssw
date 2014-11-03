@@ -6,34 +6,52 @@ from CMGTools.RootTools.RootTools import *
 from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 
 ##------------------------------------------
+## Choose the type of cut flow
+## Signal or control sample
+##------------------------------------------
+
+#cutFlow = 'Signal'
+#cutFlow = 'SingleMu'
+#cutFlow = 'DoubleMu'
+cutFlow = 'SinglePhoton'
+#cutFlow = 'SingleEle'
+#cutFlow = 'DoubleEle'
+#cutFlow = 'MultiJetEnriched'
+#cutFlow = 'Test'
+
+##------------------------------------------
 ## Redefine analyzer parameters
 ##------------------------------------------
 
 # Muons
 #------------------------------
-ttHLepAna.loose_muon_pt               = 10.,
-ttHLepAna.loose_muon_eta              = 2.5,
-ttHLepAna.loose_muon_dxy              = 0.5
-ttHLepAna.loose_muon_dz               = 1.0
-#ttHLepAna.loose_muon_relIso           = 0.15
+ttHLepAna.loose_muon_pt               = 10.
+ttHLepAna.loose_muon_eta              = 2.5
+ttHLepAna.loose_muon_id               = "POG_ID_Tight"
+ttHLepAna.loose_muon_dxy              = 0.2
+ttHLepAna.loose_muon_dz               = 0.5
+ttHLepAna.loose_muon_relIso           = 0.12
+#
+## Electrons
+##------------------------------
+ttHLepAna.loose_electron_id           = "POG_Cuts_ID_2012_Loose"
+#ttHLepAna.loose_electron_id          = "POG_CSA14_25ns_v1_Loose"  
 
-# Electrons
-#------------------------------
-ttHLepAna.loose_electron_id           = "POG_Cuts_ID_2012_Veto"
 ttHLepAna.loose_electron_pt           = 10
 ttHLepAna.loose_electron_eta          = 2.5
-ttHLepAna.loose_electron_dxy          = 0.5
-ttHLepAna.loose_electron_dz           = 0.
-# ttHLepAna.loose_electron_relIso       = 0.15
-# ttHLepAna.loose_electron_lostHits     = 999 # no cut
+ttHLepAna.loose_electron_dxy          = 0.02
+ttHLepAna.loose_electron_dz           = 0.2
+ttHLepAna.loose_electron_relIso       = 0.15
+ttHLepAna.loose_electron_lostHits     = 1 
 # ttHLepAna.inclusive_electron_lostHits = 999 # no cut
-# ttHLepAna.ele_isoCorr                 = "deltaBeta"
-# ttHLepAna.ele_tightId                 = "Cuts_2012"
+ttHLepAna.ele_isoCorr                 = "rhoArea"
+ttHLepAna.ele_tightId                 = "Cuts_2012"
 
 # Photons
 #------------------------------
-ttHPhoAna.ptMin                        = 25,
-ttHPhoAna.epaMax                       = 2.5,
+ttHPhoAna.ptMin                       = 25
+ttHPhoAna.etaMax                      = 2.5
+ttHPhoAna.gammaID                     = "PhotonCutBasedIDLoose"
 
 # Taus 
 #------------------------------
@@ -55,16 +73,6 @@ ttHJetAna.recalibrateJets = False
 ttHJetAna.jetLepDR        = 0.4
 ttHJetMCAna.smearJets     = False
 
-
-# Energy sums
-#------------------------------
-# NOTE: Currently energy sums are calculated with 40 GeV jets (ttHCoreEventAnalyzer.py)
-#       However, the input collection is cleanjets which have a 50 GeV cut so this is a labeling problem
-
-ttHJetMETSkim.htCut       = ('htJet50j', 0)
-ttHJetMETSkim.mhtCut      = ('htJet40j', 0)
-ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
-
 ##------------------------------------------
 ##  ISOLATED TRACK
 ##------------------------------------------
@@ -76,9 +84,9 @@ ttHIsoTrackAna = cfg.Analyzer(
 #            candidatesTypes='std::vector<cmg::Candidate>',
             candidates      ='packedPFCandidates',
             candidatesTypes ='std::vector<pat::PackedCandidate>',
-            ptMin           = 5, ### for pion 
-            ptMinEMU        = 5, ### for EMU
-            dzMax           = 0.1,
+            ptMin           = 10, ### for pion 
+            ptMinEMU        = 10, ### for EMU
+            dzMax           = 0.05,
             #####
             isoDR           = 0.3,
             ptPartMin       = 0,
@@ -95,10 +103,94 @@ ttHIsoTrackAna = cfg.Analyzer(
 ##  ALPHAT VARIABLES
 ##------------------------------------------
 
-# Tree Producer
 ttHAlphaTAna = cfg.Analyzer(
             'ttHAlphaTVarAnalyzer'
             )
+
+##------------------------------------------
+##  mT_W VARIABLE
+##------------------------------------------
+
+# Currently produced in alphaT analyzer
+# Modularize in future? 
+
+
+#-------------------------------------------
+# CUTS AND VETOS
+#-------------------------------------------
+# NOTE: Currently energy sums are calculated with 40 GeV jets (ttHCoreEventAnalyzer.py)
+#       However, the input collection is cleanjets which have a 50 GeV cut so this is a labeling problem
+
+#Start with the signal region default cut flow
+
+#ESums
+ttHJetMETSkim.jetPtCuts   = [100,100] # require the lead two jets to be above 100GeV
+ttHJetMETSkim.htCut       = ('htJet40j', 200)
+ttHJetMETSkim.mhtCut      = ('mhtJet40j', 0)
+ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
+
+ttHLepSkim.maxLeptons     = 0
+ttHLepSkim.minLeptons     = 0
+
+#Photons
+ttHPhotonSkim = cfg.Analyzer(
+    'ttHPhotonSkimmer',
+    minPhotons = 0,
+    maxPhotons = 0,
+    #idCut  = "photon.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the photons
+    )
+
+#AlphaT Specific cuts
+
+ttHAlphaTSkim = cfg.Analyzer(
+            'ttHAlphaTSkimmer',
+            forwardJetVeto = True,
+            alphaTCuts = [(0.65, 200, 275),   #AlphaT cut in HT region
+                          (0.60, 275, 325),   #(aT, HTlow, HThigh)
+                          (0.55, 325, 99999)],#Any region not specified will be vetoed
+            invertAlphaT = False, #Invert the alphaT requirement
+            mhtDivMetCut = ('mhtJet40j','met',1.25), #MHT/MET cut
+            )
+
+
+# (FIXME Instead of everything here, have an alphaT core file (like susyCore) which
+# does the selection and cutflow. Then have the rest of this file below)
+
+# Modify the cuts for the control regions
+if cutFlow=='SingleMu':
+    ttHLepSkim.maxLeptons     = 1
+    ttHLepSkim.minLeptons     = 1
+
+elif cutFlow=='DoubleMu':
+    ttHLepSkim.maxLeptons     = 2
+    ttHLepSkim.minLeptons     = 2
+
+elif cutFlow=='SinglePhoton':
+    ttHPhotonSkim.minPhotons  = 1
+    ttHPhotonSkim.maxPhotons  = 9999
+    ttHAlphaTSkim.invertAlphaT = True
+    ttHPhotonSkim.idCut = "abs(photon.eta()) < 1.0"
+    ttHPhotonSkim.ptCuts = [25]
+
+elif cutFlow=='SingleEle':
+    ttHLepSkim.maxLeptons     = 1
+    ttHLepSkim.minLeptons     = 1
+
+elif cutFlow=='DoubleEle':
+    ttHLepSkim.maxLeptons     = 2
+    ttHLepSkim.minLeptons     = 2
+
+elif cutFlow=='MultiJetEnriched':
+    ttHAlphaTSkim.invertAlphaT = True
+
+elif cutFlow=='Test':
+    ttHLepSkim.maxLeptons     = 99
+    ttHLepSkim.minLeptons     = 0
+    ttHAlphaTSkim.invertAlphaT = True
+    ttHPhotonSkim.minPhotons  = 0
+    ttHPhotonSkim.maxPhotons  = 9999
+    ttHPhotonSkim.ptCuts = [25]
 
 ##------------------------------------------
 ##  PRODUCER
@@ -149,7 +241,7 @@ TTbar        = [ TTpythia8_PU20bx25 ]
 T1tttt       = [ T1tttt_PU20bx25 ]
 
 
-#selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
+selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
 selectedComponents = []
 selectedComponents.extend( WJetsToLNu )
 selectedComponents.extend( TTbar )
@@ -162,17 +254,23 @@ selectedComponents.extend( TTbar )
 sequence = cfg.Sequence(susyCoreSequence + [
                         ttHIsoTrackAna,
                         ttHAlphaTAna,
+                        ttHAlphaTSkim,
+                        ttHPhotonSkim,
                         treeProducer,
                         ])
 
 
 #-------- HOW TO RUN
-test = 4
+test = 1
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
-    comp               = TTJets_PU20bx25
+    comp               = T1tttt_PU20bx25
+    if cutFlow == 'Test':
+        comp = VBFHGG_PU20bx25 
+    if cutFlow == 'SinglePhoton':
+        comp = VBFHGG_PU20bx25 
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
@@ -192,6 +290,7 @@ elif test==2:
 #--------------------------------------------------
 elif test==4:
     comp = TTJets_PU20bx25
+
 #    comp.name = 'TTJets'
     #    comp.files = [ '/store/mc/Spring14miniaod/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/063013AD-9907-E411-8135-0026189438BD.root' ]
 
