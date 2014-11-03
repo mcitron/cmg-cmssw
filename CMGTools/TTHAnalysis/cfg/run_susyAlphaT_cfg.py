@@ -134,11 +134,35 @@ ttHLepSkim.minLeptons     = 0
 
 #Photons
 ttHPhotonSkim = cfg.Analyzer(
-    'ttHPhotonSkimmer',
-    minPhotons = 0,
-    maxPhotons = 0,
-    #idCut  = "photon.relIso03 < 0.2" # can give a cut
-    #ptCuts = [20,10],                # can give a set of pt cuts on the photons
+    'ttHObjectSkimmer',
+    skimmerName = 'ttHPhotonSkimmer',
+    objects = 'selectedPhotons',
+    minObjects = 0,
+    maxObjects = 0,
+    #idCut  = "object.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the objects
+    )
+
+#Muons
+ttHMuonSkim = cfg.Analyzer(
+    'ttHObjectSkimmer',
+    skimmerName = 'ttHMuonSkimmer',
+    objects = 'selectedMuons',
+    minObjects = 0,
+    maxObjects = 0,
+    #idCut  = "object.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the objects
+    )
+
+#Electrons
+ttHElectronSkim = cfg.Analyzer(
+    'ttHObjectSkimmer',
+    skimmerName = 'ttHElectronSkimmer',
+    objects = 'selectedElectrons',
+    minObjects = 0,
+    maxObjects = 0,
+    #idCut  = "object.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the objects
     )
 
 #AlphaT Specific cuts
@@ -155,31 +179,38 @@ ttHAlphaTSkim = cfg.Analyzer(
 
 
 # (FIXME Instead of everything here, have an alphaT core file (like susyCore) which
-# does the selection and cutflow. Then have the rest of this file below)
+# does the default selection and cutflow. Then have the rest of this file below)
 
 # Modify the cuts for the control regions
 if cutFlow=='SingleMu':
     ttHLepSkim.maxLeptons     = 1
     ttHLepSkim.minLeptons     = 1
+    ttHMuonSkim.minObjects  = 1
+    ttHMuonSkim.maxObjects  = 1
 
 elif cutFlow=='DoubleMu':
     ttHLepSkim.maxLeptons     = 2
     ttHLepSkim.minLeptons     = 2
+    ttHMuonSkim.minObjects  = 2
+    ttHMuonSkim.maxObjects  = 2
 
 elif cutFlow=='SinglePhoton':
-    ttHPhotonSkim.minPhotons  = 1
-    ttHPhotonSkim.maxPhotons  = 9999
-    ttHAlphaTSkim.invertAlphaT = True
-    ttHPhotonSkim.idCut = "abs(photon.eta()) < 1.0"
-    ttHPhotonSkim.ptCuts = [25]
+    ttHPhotonSkim.minObjects  = 1
+    ttHPhotonSkim.maxObjects  = 9999
+    ttHPhotonSkim.idCut = "abs(object.eta()) < 1.45" #uses the object skimmer
+    ttHPhotonSkim.ptCuts = [165]
 
 elif cutFlow=='SingleEle':
     ttHLepSkim.maxLeptons     = 1
     ttHLepSkim.minLeptons     = 1
+    ttHElectronSkim.minObjects  = 1
+    ttHElectronSkim.maxObjects  = 1
 
 elif cutFlow=='DoubleEle':
     ttHLepSkim.maxLeptons     = 2
     ttHLepSkim.minLeptons     = 2
+    ttHElectronSkim.minObjects  = 2
+    ttHElectronSkim.maxObjects  = 2
 
 elif cutFlow=='MultiJetEnriched':
     ttHAlphaTSkim.invertAlphaT = True
@@ -256,6 +287,8 @@ sequence = cfg.Sequence(susyCoreSequence + [
                         ttHAlphaTAna,
                         ttHAlphaTSkim,
                         ttHPhotonSkim,
+                        ttHMuonSkim,
+                        ttHElectronSkim,
                         treeProducer,
                         ])
 
@@ -271,6 +304,8 @@ if test==1:
         comp = VBFHGG_PU20bx25 
     if cutFlow == 'SinglePhoton':
         comp = VBFHGG_PU20bx25 
+    if cutFlow == 'SingleMu':
+        comp = DYJetsM50_PU20bx25
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
