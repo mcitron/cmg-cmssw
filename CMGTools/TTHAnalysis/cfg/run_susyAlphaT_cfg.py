@@ -13,11 +13,11 @@ from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
 #cutFlow = 'DoubleMu'
-cutFlow = 'SinglePhoton'
+#cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
-#cutFlow = 'Test'
+cutFlow = 'Test'
 
 ##------------------------------------------
 ## Redefine analyzer parameters
@@ -125,8 +125,8 @@ ttHAlphaTAna = cfg.Analyzer(
 
 #ESums
 ttHJetMETSkim.jetPtCuts   = [100,100] # require the lead two jets to be above 100GeV
-ttHJetMETSkim.htCut       = ('htJet40j', 200)
-ttHJetMETSkim.mhtCut      = ('mhtJet40j', 0)
+ttHJetMETSkim.htCut       = ('htJet50j', 200)
+ttHJetMETSkim.mhtCut      = ('mhtJet50j', 0)
 ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
 
 ttHLepSkim.maxLeptons     = 0
@@ -174,7 +174,7 @@ ttHAlphaTSkim = cfg.Analyzer(
                           (0.60, 275, 325),   #(aT, HTlow, HThigh)
                           (0.55, 325, 99999)],#Any region not specified will be vetoed
             invertAlphaT = False, #Invert the alphaT requirement
-            mhtDivMetCut = ('mhtJet40j','met',1.25), #MHT/MET cut
+            mhtDivMetCut = ('mhtJet50j','met',1.25), #MHT/MET cut
             )
 
 

@@ -41,7 +41,7 @@ class ttHAlphaTSkimmer( Analyzer ):
         if self.cfg_ana.invertAlphaT: #This is for the multijet enriched control region
 
             for aTCut in self.cfg_ana.alphaTCuts:
-                if event.alphaT < aTCut[0] and event.htJet40j >= aTCut[1] and event.htJet40j < aTCut[2]:
+                if event.alphaT < aTCut[0] and event.htJet50j >= aTCut[1] and event.htJet50j < aTCut[2]:
                     self.counters.counter('events').inc('pass alphaTCuts')
                     self.counters.counter('events').inc('accepted events')
                     return True
@@ -49,7 +49,7 @@ class ttHAlphaTSkimmer( Analyzer ):
         else:
 
             for aTCut in self.cfg_ana.alphaTCuts:
-                if event.alphaT > aTCut[0] and event.htJet40j >= aTCut[1] and event.htJet40j < aTCut[2]:
+                if event.alphaT > aTCut[0] and event.htJet50j >= aTCut[1] and event.htJet50j < aTCut[2]:
                     self.counters.counter('events').inc('pass alphaTCuts')
                     self.counters.counter('events').inc('accepted events')
                     return True

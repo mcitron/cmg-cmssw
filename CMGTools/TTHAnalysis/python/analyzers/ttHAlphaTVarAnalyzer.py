@@ -72,8 +72,8 @@ class ttHAlphaTVarAnalyzer( Analyzer ):
         if len(event.cleanJets) == 0:
             event.biasedDPhi = 0
             return 
-	mhtPx = event.mhtJet40vec.px()
-	mhtPy = event.mhtJet40vec.py()
+	mhtPx = event.mhtJet50jvec.px()
+	mhtPy = event.mhtJet50jvec.py()
 
 	biasedDPhi = 10;
         for jet in event.cleanJets:
