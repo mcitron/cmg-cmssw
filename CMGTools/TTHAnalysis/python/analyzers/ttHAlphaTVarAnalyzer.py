@@ -5,6 +5,7 @@ from math import *
 
 #from ROOT import TLorentzVector, TVectorD
 
+from CMGTools.RootTools.utils.DeltaR import deltaR, deltaPhi
 from CMGTools.RootTools.fwlite.Analyzer import Analyzer
 from CMGTools.RootTools.fwlite.Event import Event
 from CMGTools.RootTools.statistics.Counter import Counter, Counters
@@ -66,6 +67,27 @@ class ttHAlphaTVarAnalyzer( Analyzer ):
 
         return
 
+    def makeBiasedDPhi(self, event):
+
+        if len(event.cleanJets) == 0:
+            event.biasedDPhi = 0
+            return 
+	mhtPx = event.mhtJet40vec.px()
+	mhtPy = event.mhtJet40vec.py()
+
+	biasedDPhi = 10;
+        for jet in event.cleanJets:
+	    newPhi = atan2(mhtPy+jet.py(),mhtPx+jet.px())
+	    biasedDPhiTemp = abs(deltaPhi(newPhi,jet.phi()))
+	    if biasedDPhiTemp < biasedDPhi:
+		biasedDPhi = biasedDPhiTemp
+		biasedDPhiJet = jet
+            pass
+
+        event.biasedDPhi = biasedDPhi
+        event.biasedDPhiJet = biasedDPhiJet
+
+        return
     # Calculate MT_W (stolen from the MT2 code)
     # Modularize this later?
     def makeMT(self, event):
@@ -93,7 +115,9 @@ class ttHAlphaTVarAnalyzer( Analyzer ):
 
         event.alphaT = -999
         self.makeAlphaT(event)
-
+	event.biasedDPhi = -999
+	#event.biasDPhiJet = -999
+	self.makeBiasedDPhi(event)
         event.mtw = -999
         event.mtwTau = -999
         event.mtwIsoTrack = -999
