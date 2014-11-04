@@ -12,12 +12,12 @@ from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-#cutFlow = 'DoubleMu'
+cutFlow = 'DoubleMu'
 #cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
-cutFlow = 'Test'
+#cutFlow = 'Test'
 
 ##------------------------------------------
 ## Redefine analyzer parameters
@@ -77,6 +77,8 @@ ttHJetMCAna.smearJets     = False
 ##  ISOLATED TRACK
 ##------------------------------------------
 
+# FIXME have to check isolation for control regions
+
 # those are the cuts for the nonEMu
 ttHIsoTrackAna = cfg.Analyzer(
             'ttHIsoTrackAnalyzer',
@@ -103,23 +105,19 @@ ttHIsoTrackAna = cfg.Analyzer(
 ##  ALPHAT VARIABLES
 ##------------------------------------------
 
+# Make alphaT and biased delta phi
 ttHAlphaTAna = cfg.Analyzer(
             'ttHAlphaTVarAnalyzer'
             )
 
-##------------------------------------------
-##  mT_W VARIABLE
-##------------------------------------------
-
-# Currently produced in alphaT analyzer
-# Modularize in future? 
-
+# Make mtw, z mass and deltaR between leptons and jet
+ttHAlphaTControlAna = cfg.Analyzer(
+            'ttHAlphaTControlAnalyzer'
+            )
 
 #-------------------------------------------
 # CUTS AND VETOS
 #-------------------------------------------
-# NOTE: Currently energy sums are calculated with 40 GeV jets (ttHCoreEventAnalyzer.py)
-#       However, the input collection is cleanjets which have a 50 GeV cut so this is a labeling problem
 
 #Start with the signal region default cut flow
 
@@ -165,6 +163,17 @@ ttHElectronSkim = cfg.Analyzer(
     #ptCuts = [20,10],                # can give a set of pt cuts on the objects
     )
 
+#Isolated tracks
+ttHIsoTrackSkim = cfg.Analyzer(
+    'ttHObjectSkimmer',
+    skimmerName = 'ttHIsoTrackSkimmer',
+    objects = 'selectedIsoTrack',
+    minObjects = 0,
+    maxObjects = 0,
+    #idCut  = "object.relIso03 < 0.2" # can give a cut
+    #ptCuts = [20,10],                # can give a set of pt cuts on the objects
+    )
+
 #AlphaT Specific cuts
 
 ttHAlphaTSkim = cfg.Analyzer(
@@ -177,28 +186,51 @@ ttHAlphaTSkim = cfg.Analyzer(
             mhtDivMetCut = ('mhtJet50j','met',1.25), #MHT/MET cut
             )
 
+ttHAlphaTControlSkim = cfg.Analyzer(
+            'ttHAlphaTControlSkimmer',
+            mtwCut = (0,99999),
+            mllCut = (0,99999),
+            lepDeltaRCut = 0,
+            photonDeltaRCut = 0,
+            )
+
 
 # (FIXME Instead of everything here, have an alphaT core file (like susyCore) which
 # does the default selection and cutflow. Then have the rest of this file below)
 
 # Modify the cuts for the control regions
 if cutFlow=='SingleMu':
+    ttHLepAna.loose_muon_pt   = 30.
+    ttHLepAna.loose_muon_eta  = 2.1
     ttHLepSkim.maxLeptons     = 1
     ttHLepSkim.minLeptons     = 1
     ttHMuonSkim.minObjects  = 1
     ttHMuonSkim.maxObjects  = 1
+    ttHIsoTrackSkim.minObjects  = 0 # FIXME Muons count as isolated tracks
+    ttHIsoTrackSkim.maxObjects  = 1 #
+    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #AlphaT cut in HT region
+    #ttHAlphaTControlSkim.mtwCut = (30,125)
+    ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
 elif cutFlow=='DoubleMu':
+    ttHLepAna.loose_muon_pt   = 30.
+    ttHLepAna.loose_muon_eta  = 2.1
     ttHLepSkim.maxLeptons     = 2
     ttHLepSkim.minLeptons     = 2
     ttHMuonSkim.minObjects  = 2
     ttHMuonSkim.maxObjects  = 2
+    ttHIsoTrackSkim.minObjects  = 0
+    ttHIsoTrackSkim.maxObjects  = 2
+    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #AlphaT cut in HT region
+    ttHAlphaTControlSkim.mllCut = (66.2,116.2)
+    ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
 elif cutFlow=='SinglePhoton':
     ttHPhotonSkim.minObjects  = 1
     ttHPhotonSkim.maxObjects  = 9999
     ttHPhotonSkim.idCut = "abs(object.eta()) < 1.45" #uses the object skimmer
     ttHPhotonSkim.ptCuts = [165]
+    ttHAlphaTControlSkim.photonDeltaRCut = 0.5
 
 elif cutFlow=='SingleEle':
     ttHLepSkim.maxLeptons     = 1
@@ -283,12 +315,15 @@ selectedComponents.extend( TTbar )
 #-------- SEQUENCE
 
 sequence = cfg.Sequence(susyCoreSequence + [
-                        ttHIsoTrackAna,
-                        ttHAlphaTAna,
-                        ttHAlphaTSkim,
                         ttHPhotonSkim,
                         ttHMuonSkim,
                         ttHElectronSkim,
+                        ttHIsoTrackAna,
+                        ttHIsoTrackSkim,
+                        ttHAlphaTAna,
+                        ttHAlphaTControlAna,
+                        ttHAlphaTSkim,
+                        ttHAlphaTControlSkim,
                         treeProducer,
                         ])
 
@@ -304,8 +339,6 @@ if test==1:
         comp = VBFHGG_PU20bx25 
     if cutFlow == 'SinglePhoton':
         comp = VBFHGG_PU20bx25 
-    if cutFlow == 'SingleMu':
-        comp = DYJetsM50_PU20bx25
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     

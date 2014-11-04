@@ -17,17 +17,13 @@ from CMGTools.RootTools.fwlite.AutoHandle import AutoHandle
 # from CMGTools.RootTools.physicsobjects.Tau import Tau
 from CMGTools.RootTools.physicsobjects.Jet import Jet
 
-from CMGTools.RootTools.utils.DeltaR import * 
+#from CMGTools.RootTools.utils.DeltaR import * 
 
 import ROOT
 from ROOT import AlphaT
 
 
 import os
-
-# Function to calculate the transverse mass
-def mtw(x1,x2):
-    return sqrt(2*x1.pt()*x2.pt()*(1-cos(x1.phi()-x2.phi())))
 
 class ttHAlphaTVarAnalyzer( Analyzer ):
     def __init__(self, cfg_ana, cfg_comp, looperName ):
@@ -88,27 +84,6 @@ class ttHAlphaTVarAnalyzer( Analyzer ):
         event.biasedDPhiJet = biasedDPhiJet
 
         return
-    # Calculate MT_W (stolen from the MT2 code)
-    # Modularize this later?
-    def makeMT(self, event):
-    # print '==> INSIDE THE PRINT MT'
-    # print 'MET=',event.met.pt() 
-
-        if len(event.selectedLeptons)>0:
-            for lepton in event.selectedLeptons:
-                event.mtw = mtw(lepton, event.met)
-
-        if len(event.selectedTaus)>0:
-            for myTau in event.selectedTaus:
-                event.mtwTau = mtw(myTau, event.met)
-                foundTau = True
-                
-        if len(event.selectedIsoTrack)>0:
-            for myTrack in event.selectedIsoTrack:
-                event.mtwIsoTrack = mtw(myTrack, event.met)
-
-        return
-
 
     def process(self, iEvent, event):
         self.readCollections( iEvent )
@@ -118,9 +93,5 @@ class ttHAlphaTVarAnalyzer( Analyzer ):
 	event.biasedDPhi = -999
 	#event.biasDPhiJet = -999
 	self.makeBiasedDPhi(event)
-        event.mtw = -999
-        event.mtwTau = -999
-        event.mtwIsoTrack = -999
-        self.makeMT(event)
 
         return True
