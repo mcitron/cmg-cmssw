@@ -11,8 +11,8 @@ from CMGTools.TTHAnalysis.analyzers.susyCore_modules_cff import *
 ##------------------------------------------
 
 #cutFlow = 'Signal'
-#cutFlow = 'SingleMu'
-cutFlow = 'DoubleMu'
+cutFlow = 'SingleMu'
+#cutFlow = 'DoubleMu'
 #cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
@@ -188,8 +188,8 @@ ttHAlphaTSkim = cfg.Analyzer(
 
 ttHAlphaTControlSkim = cfg.Analyzer(
             'ttHAlphaTControlSkimmer',
-            mtwCut = (0,99999),
-            mllCut = (0,99999),
+            mtwCut = (-99999,99999),
+            mllCut = (-99999,99999),
             lepDeltaRCut = 0,
             photonDeltaRCut = 0,
             )
@@ -208,8 +208,8 @@ if cutFlow=='SingleMu':
     ttHMuonSkim.maxObjects  = 1
     ttHIsoTrackSkim.minObjects  = 0 # FIXME Muons count as isolated tracks
     ttHIsoTrackSkim.maxObjects  = 1 #
-    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #AlphaT cut in HT region
-    #ttHAlphaTControlSkim.mtwCut = (30,125)
+    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut 
+    ttHAlphaTControlSkim.mtwCut = (30,125)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
 elif cutFlow=='DoubleMu':
@@ -221,7 +221,7 @@ elif cutFlow=='DoubleMu':
     ttHMuonSkim.maxObjects  = 2
     ttHIsoTrackSkim.minObjects  = 0
     ttHIsoTrackSkim.maxObjects  = 2
-    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #AlphaT cut in HT region
+    ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut
     ttHAlphaTControlSkim.mllCut = (66.2,116.2)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
