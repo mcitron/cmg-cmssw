@@ -97,7 +97,7 @@ ttHIsoTrackAna = cfg.Analyzer(
             #####
             MaxIsoSum       = 0.1, ### unused
             MaxIsoSumEMU    = 0.2, ### unused
-            doSecondVeto    = False
+            doSecondVeto    = False,
             )
 
 
@@ -127,8 +127,6 @@ ttHJetMETSkim.htCut       = ('htJet50j', 200)
 ttHJetMETSkim.mhtCut      = ('mhtJet50j', 0)
 ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
 
-ttHLepSkim.maxLeptons     = 0
-ttHLepSkim.minLeptons     = 0
 
 #Photons
 ttHPhotonSkim = cfg.Analyzer(
@@ -165,11 +163,12 @@ ttHElectronSkim = cfg.Analyzer(
 
 #Isolated tracks
 ttHIsoTrackSkim = cfg.Analyzer(
-    'ttHObjectSkimmer',
-    skimmerName = 'ttHIsoTrackSkimmer',
+    'ttHIsoTrackSkimmer',
     objects = 'selectedIsoTrack',
     minObjects = 0,
     maxObjects = 0,
+    allowedMuon = 0,
+    allowedElectron = 0,
     #idCut  = "object.relIso03 < 0.2" # can give a cut
     #ptCuts = [20,10],                # can give a set of pt cuts on the objects
     )
@@ -202,12 +201,9 @@ ttHAlphaTControlSkim = cfg.Analyzer(
 if cutFlow=='SingleMu':
     ttHLepAna.loose_muon_pt   = 30.
     ttHLepAna.loose_muon_eta  = 2.1
-    ttHLepSkim.maxLeptons     = 1
-    ttHLepSkim.minLeptons     = 1
     ttHMuonSkim.minObjects  = 1
     ttHMuonSkim.maxObjects  = 1
-    ttHIsoTrackSkim.minObjects  = 0 # FIXME Muons count as isolated tracks
-    ttHIsoTrackSkim.maxObjects  = 1 #
+    ttHIsoTrackSkim.allowedMuon  = 1 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut 
     ttHAlphaTControlSkim.mtwCut = (30,125)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
@@ -215,12 +211,9 @@ if cutFlow=='SingleMu':
 elif cutFlow=='DoubleMu':
     ttHLepAna.loose_muon_pt   = 30.
     ttHLepAna.loose_muon_eta  = 2.1
-    ttHLepSkim.maxLeptons     = 2
-    ttHLepSkim.minLeptons     = 2
     ttHMuonSkim.minObjects  = 2
     ttHMuonSkim.maxObjects  = 2
-    ttHIsoTrackSkim.minObjects  = 0
-    ttHIsoTrackSkim.maxObjects  = 2
+    ttHIsoTrackSkim.allowedMuon  = 2 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut
     ttHAlphaTControlSkim.mllCut = (66.2,116.2)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
@@ -233,27 +226,29 @@ elif cutFlow=='SinglePhoton':
     ttHAlphaTControlSkim.photonDeltaRCut = 0.5
 
 elif cutFlow=='SingleEle':
-    ttHLepSkim.maxLeptons     = 1
-    ttHLepSkim.minLeptons     = 1
     ttHElectronSkim.minObjects  = 1
     ttHElectronSkim.maxObjects  = 1
+    ttHIsoTrackSkim.allowedElectron  = 1 #
 
 elif cutFlow=='DoubleEle':
-    ttHLepSkim.maxLeptons     = 2
-    ttHLepSkim.minLeptons     = 2
     ttHElectronSkim.minObjects  = 2
     ttHElectronSkim.maxObjects  = 2
+    ttHIsoTrackSkim.allowedElectron  = 2 #
 
 elif cutFlow=='MultiJetEnriched':
     ttHAlphaTSkim.invertAlphaT = True
 
 elif cutFlow=='Test':
-    ttHLepSkim.maxLeptons     = 99
-    ttHLepSkim.minLeptons     = 0
+    ttHMuonSkim.maxObjects     = 99
+    ttHMuonSkim.minObjects     = 0
+    ttHElectronSkim.maxObjects     = 99
+    ttHElectronSkim.minObjects     = 0
     ttHAlphaTSkim.invertAlphaT = True
     ttHPhotonSkim.minPhotons  = 0
     ttHPhotonSkim.maxPhotons  = 9999
     ttHPhotonSkim.ptCuts = [25]
+    ttHIsoTrackSkim.minObjects  = 0 # FIXME Muons count as isolated tracks
+    ttHIsoTrackSkim.maxObjects  = 9999 #
 
 ##------------------------------------------
 ##  PRODUCER
