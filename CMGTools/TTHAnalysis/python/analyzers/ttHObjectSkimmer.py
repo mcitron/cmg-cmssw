@@ -19,9 +19,9 @@ class ttHObjectSkimmer( Analyzer ):
         self.cfg_comp = cfg_comp
         self.looperName = looperName
         if hasattr(cfg_ana, 'skimmerName'):
-            self.dirName = '/'.join( [self.looperName, cfg_ana.skimmerName] )
+            self.dirName = os.path.join(self.looperName, cfg_ana.skimmerName)
         else:
-            self.dirName = '/'.join( [self.looperName, self.name] )
+            self.dirName = os.path.join(self.looperName, self.name)
 
         os.mkdir( self.dirName )
 

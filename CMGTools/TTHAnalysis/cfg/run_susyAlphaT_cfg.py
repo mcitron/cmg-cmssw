@@ -127,8 +127,6 @@ ttHJetMETSkim.htCut       = ('htJet50j', 200)
 ttHJetMETSkim.mhtCut      = ('mhtJet50j', 0)
 ttHJetMETSkim.nBJet       = ('CSVM', 0, "jet.pt() > 50")     # require at least 0 jets passing CSVM and pt > 50
 
-ttHLepSkim.maxLeptons     = 0
-ttHLepSkim.minLeptons     = 0
 
 #Photons
 ttHPhotonSkim = cfg.Analyzer(
@@ -166,7 +164,6 @@ ttHElectronSkim = cfg.Analyzer(
 #Isolated tracks
 ttHIsoTrackSkim = cfg.Analyzer(
     'ttHIsoTrackSkimmer',
-    skimmerName = 'ttHIsoTrackSkimmer',
     objects = 'selectedIsoTrack',
     minObjects = 0,
     maxObjects = 0,
@@ -204,8 +201,6 @@ ttHAlphaTControlSkim = cfg.Analyzer(
 if cutFlow=='SingleMu':
     ttHLepAna.loose_muon_pt   = 30.
     ttHLepAna.loose_muon_eta  = 2.1
-    ttHLepSkim.maxLeptons     = 1
-    ttHLepSkim.minLeptons     = 1
     ttHMuonSkim.minObjects  = 1
     ttHMuonSkim.maxObjects  = 1
     ttHIsoTrackAna.leadMuonRemove  = True 
@@ -217,8 +212,6 @@ if cutFlow=='SingleMu':
 elif cutFlow=='DoubleMu':
     ttHLepAna.loose_muon_pt   = 30.
     ttHLepAna.loose_muon_eta  = 2.1
-    ttHLepSkim.maxLeptons     = 2
-    ttHLepSkim.minLeptons     = 2
     ttHMuonSkim.minObjects  = 2
     ttHMuonSkim.maxObjects  = 2
     ttHIsoTrackAna.leadTwoMuonRemove  = True 
@@ -235,15 +228,11 @@ elif cutFlow=='SinglePhoton':
     ttHAlphaTControlSkim.photonDeltaRCut = 0.5
 
 elif cutFlow=='SingleEle':
-    ttHLepSkim.maxLeptons     = 1
-    ttHLepSkim.minLeptons     = 1
     ttHElectronSkim.minObjects  = 1
     ttHElectronSkim.maxObjects  = 1
     ttHIsoTrackSkim.allowedElectron  = 1 #
 
 elif cutFlow=='DoubleEle':
-    ttHLepSkim.maxLeptons     = 2
-    ttHLepSkim.minLeptons     = 2
     ttHElectronSkim.minObjects  = 2
     ttHElectronSkim.maxObjects  = 2
     ttHIsoTrackSkim.allowedElectron  = 2 #

@@ -12,25 +12,7 @@ class ttHIsoTrackSkimmer( Analyzer ):
         #Rather than using the inherited init do own so can choose directory
         #name
 
-        #super(ttHIsoTrackSkimmer,self).__init__(cfg_ana,cfg_comp,looperName)
-
-        self.name = cfg_ana.name
-        self.verbose = cfg_ana.verbose
-        self.cfg_ana = cfg_ana
-        self.cfg_comp = cfg_comp
-        self.looperName = looperName
-        if hasattr(cfg_ana, 'skimmerName'):
-            self.dirName = '/'.join( [self.looperName, cfg_ana.skimmerName] )
-        else:
-            self.dirName = '/'.join( [self.looperName, self.name] )
-
-        os.mkdir( self.dirName )
-
-        # this is the main logger corresponding to the looper.
-        # each analyzer could also declare its own logger
-        self.mainLogger = logging.getLogger( looperName )
-        self.beginLoopCalled = False
-
+        super(ttHIsoTrackSkimmer,self).__init__(cfg_ana,cfg_comp,looperName)
 
         self.ptCuts = cfg_ana.ptCuts if hasattr(cfg_ana, 'ptCuts') else []
         self.ptCuts += 10*[-1.]
