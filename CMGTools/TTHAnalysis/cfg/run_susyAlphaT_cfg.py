@@ -203,7 +203,6 @@ if cutFlow=='SingleMu':
     ttHLepAna.loose_muon_eta  = 2.1
     ttHMuonSkim.minObjects  = 1
     ttHMuonSkim.maxObjects  = 1
-    ttHIsoTrackAna.leadMuonRemove  = True 
     ttHIsoTrackSkim.allowedMuon  = 1 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut 
     ttHAlphaTControlSkim.mtwCut = (30,125)
@@ -214,7 +213,6 @@ elif cutFlow=='DoubleMu':
     ttHLepAna.loose_muon_eta  = 2.1
     ttHMuonSkim.minObjects  = 2
     ttHMuonSkim.maxObjects  = 2
-    ttHIsoTrackAna.leadTwoMuonRemove  = True 
     ttHIsoTrackSkim.allowedMuon  = 2 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut
     ttHAlphaTControlSkim.mllCut = (66.2,116.2)
