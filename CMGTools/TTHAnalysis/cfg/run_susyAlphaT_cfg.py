@@ -17,7 +17,7 @@ cutFlow = 'SingleMu'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
-#cutFlow = 'Test'
+# cutFlow = 'Test'
 
 ##------------------------------------------
 ## Redefine analyzer parameters
@@ -175,6 +175,15 @@ ttHIsoTrackSkim = cfg.Analyzer(
 
 #AlphaT Specific cuts
 
+ttHAlphaTMetNoMu =cfg.Analyzer(
+            'ttHAlphaTMetAnalyzer',
+            muons = 'slimmedMuons',
+            doTkMet = True,
+            candidates='packedPFCandidates',
+            candidatesTypes='std::vector<pat::PackedCandidate>',
+            dzMax = 0.1,
+    )
+
 ttHAlphaTSkim = cfg.Analyzer(
             'ttHAlphaTSkimmer',
             forwardJetVeto = True,
@@ -192,7 +201,6 @@ ttHAlphaTControlSkim = cfg.Analyzer(
             lepDeltaRCut = 0,
             photonDeltaRCut = 0,
             )
-
 
 # (FIXME Instead of everything here, have an alphaT core file (like susyCore) which
 # does the default selection and cutflow. Then have the rest of this file below)
@@ -315,6 +323,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
                         ttHElectronSkim,
                         ttHIsoTrackAna,
                         ttHIsoTrackSkim,
+                        ttHAlphaTMetNoMu,
                         ttHAlphaTAna,
                         ttHAlphaTControlAna,
                         ttHAlphaTSkim,
@@ -324,7 +333,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 1
+test = 4
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
