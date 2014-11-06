@@ -45,12 +45,8 @@ class ttHAlphaTMetAnalyzer( Analyzer ):
         event.metNoMu = copy.deepcopy(self.handles['met'].product()[0])
         event.metNoMuNoPU = copy.deepcopy(self.handles['nopumet'].product()[0])
 
-        #muons
-        allmuons = self.makeAllMuons(event)
-        event.selectedMuons = []
-        mupx = 0.
-        mupy = 0.
-        for mu in allmuons:
+        #sum muon momentum
+        for mu in event.selectedMuons:
             mupx = mupx+mu.px()
             mupy = mupy+mu.py()
 
@@ -67,30 +63,6 @@ class ttHAlphaTMetAnalyzer( Analyzer ):
             event.met.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, hypot(px,py)))
             px,py = event.metNoMuNoPU.px()+event.deltaMetFromJEC[0]-mupx, event.metNoMuNoPU.py()+event.deltaMetFromJEC[1]-mupy
             event.metNoMuNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, hypot(px,py)))
-
-    def makeAllMuons(self, event):
-        """
-               make a list of all muons, and apply basic corrections to them
-        """
-        # Start from all muons
-        allmuons = map( Muon, self.handles['muons'].product() )
-
-        # Muon scale and resolution corrections (if enabled)
-
-        # Clean up dulicate muons (note: has no effect unless the muon id is removed)
-
-        # Attach the vertex to them, for dxy/dz calculation
-        for mu in allmuons:
-            mu.associatedVertex = event.goodVertices[0]
-
-        # Compute relIso in 0.3 and 0.4 cones
-        for mu in allmuons:
-            mu.absIso03 = (mu.pfIsolationR03().sumChargedHadronPt + max( mu.pfIsolationR03().sumNeutralHadronEt +  mu.pfIsolationR03().sumPhotonEt -  mu.pfIsolationR03().sumPUPt/2,0.0))
-            mu.absIso04 = (mu.pfIsolationR04().sumChargedHadronPt + max( mu.pfIsolationR04().sumNeutralHadronEt +  mu.pfIsolationR04().sumPhotonEt -  mu.pfIsolationR04().sumPUPt/2,0.0))
-            mu.relIso03 = mu.absIso03/mu.pt()
-            mu.relIso04 = mu.absIso04/mu.pt()
- 
-        return allmuons
 
 
     def process(self, iEvent, event):

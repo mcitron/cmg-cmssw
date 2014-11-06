@@ -163,7 +163,7 @@ ttHAlphaTSkim = cfg.Analyzer(
                           (0.60, 275, 325),   #(aT, HTlow, HThigh)
                           (0.55, 325, 99999)],#Any region not specified will be vetoed
             invertAlphaT = False, #Invert the alphaT requirement
-            mhtDivMetCut = ('mhtJet50j','met',1.25), #MHT/MET cut
+            mhtDivMetCut = ('mhtJet50j','metNoMu',1.25), #MHT/MET cut
             )
 
 ttHAlphaTControlSkim = cfg.Analyzer(
@@ -176,11 +176,6 @@ ttHAlphaTControlSkim = cfg.Analyzer(
 
 ttHAlphaTMetNoMu = cfg.Analyzer(
             'ttHAlphaTMetAnalyzer',
-            muons = 'slimmedMuons',
-            doTkMet = True,
-            candidates='packedPFCandidates',
-            candidatesTypes='std::vector<pat::PackedCandidate>',
-            dzMax = 0.1,
             )
 
 
