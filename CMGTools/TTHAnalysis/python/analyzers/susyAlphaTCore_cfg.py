@@ -174,4 +174,8 @@ ttHAlphaTControlSkim = cfg.Analyzer(
             photonDeltaRCut = 0,
             )
 
+ttHAlphaTMetNoMu = cfg.Analyzer(
+            'ttHAlphaTMetAnalyzer',
+            )
+
 

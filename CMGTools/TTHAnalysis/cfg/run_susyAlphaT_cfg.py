@@ -17,9 +17,8 @@ cutFlow = 'Signal'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
-#cutFlow = 'Test'
+# cutFlow = 'Test'
 
-# Modify the cuts for the control regions
 if cutFlow=='SingleMu':
     ttHLepAna.loose_muon_pt   = 30.
     ttHLepAna.loose_muon_eta  = 2.1
@@ -27,6 +26,7 @@ if cutFlow=='SingleMu':
     ttHMuonSkim.maxObjects  = 1
     ttHIsoTrackSkim.allowedMuon  = 1 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut 
+    ttHAlphaTSkim.mhtDivMetCut = ('mhtJet50j','metNoMu',1.25)
     ttHAlphaTControlSkim.mtwCut = (30,125)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
@@ -37,6 +37,7 @@ elif cutFlow=='DoubleMu':
     ttHMuonSkim.maxObjects  = 2
     ttHIsoTrackSkim.allowedMuon  = 2 #
     ttHAlphaTSkim.alphaTCuts = [(0.0, 200,99999 )]   #Turn off AlphaT cut
+    ttHAlphaTSkim.mhtDivMetCut = ('mhtJet50j','metNoMu',1.25)
     ttHAlphaTControlSkim.mllCut = (66.2,116.2)
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
@@ -137,6 +138,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
                         ttHElectronSkim,
                         ttHIsoTrackAna,
                         ttHIsoTrackSkim,
+                        ttHAlphaTMetNoMu,
                         ttHAlphaTAna,
                         ttHAlphaTControlAna,
                         ttHAlphaTSkim,
@@ -146,7 +148,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 1
+test = 4
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
@@ -190,4 +192,4 @@ config = cfg.Config( components = selectedComponents,
                      sequence = sequence )
 
 printComps(config.components, True)
-        
+
