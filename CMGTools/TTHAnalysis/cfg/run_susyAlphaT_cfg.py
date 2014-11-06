@@ -2,7 +2,7 @@ import CMGTools.RootTools.fwlite.Config as cfg
 from CMGTools.RootTools.fwlite.Config import printComps
 from CMGTools.RootTools.RootTools import *
 
-#Load all analyzers
+#Load all analyzers with defaults for alphaT analysis
 from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 
 ##------------------------------------------
@@ -10,9 +10,9 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 ## Signal or control sample
 ##------------------------------------------
 
-#cutFlow = 'Signal'
+cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-cutFlow = 'DoubleMu'
+#cutFlow = 'DoubleMu'
 #cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
