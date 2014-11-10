@@ -161,7 +161,7 @@ ttHAlphaTSkim = cfg.Analyzer(
             forwardJetVeto = True,
             alphaTCuts = [(0.65, 200, 275),   #AlphaT cut in HT region
                           (0.60, 275, 325),   #(aT, HTlow, HThigh)
-                          (0.55, 325, 99999)],#Any region not specified will be vetMHT/MET cutoed
+                          (0.55, 325, 99999)],#Any region not specified will be vetoed
             invertAlphaT = False, #Invert the alphaT requirement
             mhtDivMetCut = ('mhtJet50j','met',1.25), #MHT/MET cut
             )
