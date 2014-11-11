@@ -11,6 +11,7 @@ sys.argv = ['-b']
 import ROOT
 sys.argv = args
 ROOT.gROOT.SetBatch(True)
+from CMGTools.RootTools.statistics.Tree import Tree
 
 #### ========= EDM/FRAMEWORK =======================
 class Event:
@@ -139,6 +140,8 @@ class Module:
         pass
     def book(self,what,name,*args):
         return self._booker.book(what,name,*args)
+    def bookTree(self,userTree):
+        return self._booker.bookTree(userTree)
 
 class EventLoop:
     def __init__(self,modules):
@@ -207,6 +210,13 @@ class BookDir:
         self._objects[name] = obj
         gdir.cd()
         return obj
+    def bookTree(self,userTree):
+        gdir = ROOT.gDirectory
+        self.tdir.cd()
+	self._objects[userTree.ttree.GetName()] = userTree.ttree
+        #self._objects[name] = userTree
+        gdir.cd()
+        return userTree
     def done(self):
         for s in self._subs: s.done()
         for k,v in self._objects.iteritems():
@@ -249,36 +259,75 @@ def closest(object,list,presel=lambda x,y: True):
 
 #### ========= TEST =======================
 if __name__ == '__main__':
-    class DummyModule(Module):
-        def beginJob(self):
-	    ht = (100,1200)
-	    bjets=(1,2)
-	    njet = 5
-            self.histo = self.book("TH2D","njet",";Ht;bjets",len(ht)-1,array('d',ht),6,0,5)
-	    self.bins=BinCollection(njet,bjets,ht)
+    class AtModule(Module):
+	def __init__(self,name,binCollection,booker=None):
+	    Module.__init__(self,name,booker)
+	    self.bins = binCollection
 
-        def analyze(self,event):
-            jets = Collection(event,"jet") 
+
+	def beginJob(self):
+
+            self.histo = self.book("TH2D","njet",";Ht;bjets",2,array('d',[100,500,1200]),6,0,5)
+
+	    userTreeObj = Tree("binTree","binTree")
+	    self.userTree = self.bookTree(userTreeObj)
+	    for binn in self.bins:
+		self.userTree.addVar('bool',binn.name())
+	    self.userTree.book()
+
+	def analyze(self,event):
+	    jets = Collection(event,"jet") 
 	    njet = event.njet
 	    ht = event.ht
-	    nBjets = event.nBJetTight40
-	    print ht,nBjets,njet
-	    print self.bins.getBin(0)
+	    nBjet = event.nBJetTight40
+	    self.histo.Fill(ht,nBjet)
+	#    print njet,nBjet,ht
 	    for binn in self.bins:
-		binn.inBin(njet,nBjets,ht)
-		self.histo.Fill(ht,nBjets)
-		print binn
+		setattr(self.userTree.s,binn.name(),binn.inBin(njet,nBjet,ht))
+		#self.userTree.s.nJet5nBJet1htLow100htHigh500bin = True
+	#	print binn
+	    self.userTree.fill()
+
 
 	    
 
     from sys import argv
     f = ROOT.TFile(argv[1])
-    print f
     t = f.Get("treeProducerSusyAlphaT")
 
+
     booker = Booker("test.root")
-    el = EventLoop([DummyModule("njet5",booker)])
+    bins1 = BinCollection([5],[0,1,2,3,4,5],[100,500,1200])
+    bins2 = BinCollection([4],[0,1,2,3,4],[100,500,1200])
+    bins3 = BinCollection([3],[0,1,2,3],[100,500,1200])
+    addBins = bins1+bins2+bins3
+    print addBins
+    #bins1 = bins1+bins2
+    el = EventLoop([AtModule("alphaT",addBins,booker)])#,AtModule("njet5",njet=6,nBjet=(1,2,3),htRanges=(100,500,1200),booker)])
     el.loop(t,1000)
+
+    #f = ROOT.TFile('myTest.root','RECREATE')
+    # t2 = Tree('Colin', 'Another test tree')
+    # #f.cd()
+    # t2.addVar('int', 'a')
+    # t2.addVar('int', 'b')
+    #
+    # t2.book()
+    # t2.s.a = 0
+    # t2.s.b = 1
+    # t2.fill()
+    
     booker.done()
+    #f.Write()
+    #f.Close()
+    # binTreeOutput = ROOT.TFile("binTreeOutput.root","RECREATE")
+    #
+    # binTree = Tree("binTree","binTree")
+    # binTree.addVar('bool','testBool')
+    # binTree.book()
+    # binTree.s.testBool = False
+    # binTree.Fill()
+    # binTreeOutput.Write()
+    # binTreeOutput.Close()
     print "Wrote to test.root"
 
