@@ -65,9 +65,17 @@ SMS_T1qqqq_2J_mGl1400_mLSP100_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponen
 SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170", "/SMS-T1tttt_2J_mGl-1200_mLSP-800_Tune4C_13TeV-madgraph-tauola/phys_susy-miniAODforSusy_SMS-T1tttt_2J_mGl-1200_mLSP-800_Tune4C_13TeV-madgraph-tauola_PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
 SMS_T1tttt_2J_mGl1500_mLSP100_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("SMS_T1tttt_2J_mGl1500_mLSP100_PU_S14_POSTLS170", "/SMS-T1tttt_2J_mGl-1500_mLSP-100_Tune4C_13TeV-madgraph-tauola/phys_susy-miniAODforSusy_SMS-T1tttt_2J_mGl-1500_mLSP-100_Tune4C_13TeV-madgraph-tauola_PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
 
+SusyPrivateSamples = [
+    SMS_T1bbbb_2J_mGl1000_mLSP900_PU_S14_POSTLS170,
+    SMS_T1bbbb_2J_mGl1500_mLSP100_PU_S14_POSTLS170,
+    SMS_T1qqqq_2J_mGl1000_mLSP800_PU_S14_POSTLS170,
+    SMS_T1qqqq_2J_mGl1400_mLSP100_PU_S14_POSTLS170,
+    SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170,
+    SMS_T1tttt_2J_mGl1500_mLSP100_PU_S14_POSTLS170,
+    ]
+
 #Combine different samples for running, modify to configure which sample you want to use
-mcSamples = []
-mcSamples.extend(WJetsToLNu,DYJetsToLL,ZJetsToNuNu,GJets,TTbar)
+mcSamples = WJetsToLNu+DYJetsToLL+ZJetsToNuNu+GJets+TTbar+SusyPrivateSamples
 
 dataDir = os.environ['CMSSW_BASE']+"/src/CMGTools/TTHAnalysis/data"
 
