@@ -10,9 +10,9 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 ## Signal or control sample
 ##------------------------------------------
 
-cutFlow = 'Signal'
+#cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-#cutFlow = 'DoubleMu'
+cutFlow = 'DoubleMu'
 #cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
@@ -101,13 +101,13 @@ from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 selectedComponents = []
 
 if cutFlow == 'Signal':
-    selectedComponents = [WJetsToLNu, ZJetsToNuNu, TTbar, SusyPrivateSamples]
-if cutFlow == 'SingleMu':
-    selectedComponents = [WJetsToLNu, TTbar]
-if cutFlow == 'DoubleMu':
-    selectedComponents = [DYJetsToLL]
-if cutFlow == 'SinglePhoton':
-    selectedComponents = [GJets]
+    selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusyPrivateSamples
+elif cutFlow == 'SingleMu':
+    selectedComponents = WJetsToLNu + TTbar
+elif cutFlow == 'DoubleMu':
+    selectedComponents = DYJetsToLL
+elif cutFlow == 'SinglePhoton':
+    selectedComponents = GJets
 else:
     selectedComponents.extend( mcSamples )
 
@@ -129,7 +129,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 1
+test = 0
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
@@ -165,7 +165,7 @@ elif test==4:
     selectedComponents = [comp]
     comp.splitFactor = 1
 #--------------------------------------------------
-
+    
 
 config = cfg.Config( components = selectedComponents,
                      sequence = sequence )
