@@ -98,10 +98,6 @@ treeProducer = cfg.Analyzer(
 # from CMGTools.TTHAnalysis.samples.samples_13TeV_CSA14 import *
 from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 
-
-
-
-selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
 selectedComponents = []
 selectedComponents.extend( mcSamples )
 
@@ -123,16 +119,14 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 2
+test = 1
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
-    comp               = T1tttt_PU20bx25
-    if cutFlow == 'Test':
-        comp = VBFHGG_PU20bx25 
+    comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
     if cutFlow == 'SinglePhoton':
-        comp = VBFHGG_PU20bx25 
+        comp = GJets_HT100to200_PU_S14_POSTLS170  
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
@@ -151,7 +145,7 @@ elif test==2:
 # Run on local files
 #--------------------------------------------------
 elif test==4:
-    comp = TTJets_PU20bx25
+    comp = TTbar_PU20bx25 
 
 #    comp.name = 'TTJets'
     #    comp.files = [ '/store/mc/Spring14miniaod/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/063013AD-9907-E411-8135-0026189438BD.root' ]
