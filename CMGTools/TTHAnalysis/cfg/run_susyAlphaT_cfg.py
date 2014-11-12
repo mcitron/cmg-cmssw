@@ -99,7 +99,17 @@ treeProducer = cfg.Analyzer(
 from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 
 selectedComponents = []
-selectedComponents.extend( mcSamples )
+
+if cutFlow == 'Signal':
+    selectedComponents = [WJetsToLNu, ZJetsToNuNu, TTbar, SusyPrivateSamples]
+if cutFlow == 'SingleMu':
+    selectedComponents = [WJetsToLNu, TTbar]
+if cutFlow == 'DoubleMu':
+    selectedComponents = [DYJetsToLL]
+if cutFlow == 'SinglePhoton':
+    selectedComponents = [GJets]
+else:
+    selectedComponents.extend( mcSamples )
 
 #-------- SEQUENCE
 
