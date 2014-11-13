@@ -129,14 +129,14 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 0
+test = 1
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
     comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
     if cutFlow == 'SinglePhoton':
-        comp = GJets_HT100to200_PU_S14_POSTLS170  
+        comp = GJets_HT400to600_PU_S14_POSTLS170  
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
@@ -148,9 +148,10 @@ if test==1:
 #--------------------------------------------------
 elif test==2:
     for comp in selectedComponents:
-        comp.splitFactor = 5
+        comp.splitFactor = 4
         comp.files       = comp.files[:1]
 #--------------------------------------------------
+
 
 # Run on local files
 #--------------------------------------------------
