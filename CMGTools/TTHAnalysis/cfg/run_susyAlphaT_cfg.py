@@ -12,8 +12,8 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-cutFlow = 'DoubleMu'
-#cutFlow = 'SinglePhoton'
+#cutFlow = 'DoubleMu'
+cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
