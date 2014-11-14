@@ -42,11 +42,13 @@ elif cutFlow=='DoubleMu':
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
 elif cutFlow=='SinglePhoton':
+    ttHPhoAna.ptMin = 165
+    ttHPhoAna.etaMax = 1.45
     ttHPhotonSkim.minObjects  = 1
-    ttHPhotonSkim.maxObjects  = 9999
-    ttHPhotonSkim.idCut = "abs(object.eta()) < 1.45" #uses the object skimmer
-    ttHPhotonSkim.ptCuts = [165]
-    ttHAlphaTControlSkim.photonDeltaRCut = 0.5
+    ttHPhotonSkim.maxObjects  = 1 
+    ttHAlphaTSkim.alphaTCuts = [(0.55, 375,99999 )]   
+    ttHAlphaTControlSkim.photonDeltaRCut = 1.0
+    mhtDivMetCut = ('mhtJet50j','met',999) #MHT/MET cut
 
 elif cutFlow=='SingleEle':
     ttHElectronSkim.minObjects  = 1
@@ -101,13 +103,13 @@ from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 selectedComponents = []
 
 if cutFlow == 'Signal':
-    selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusyPrivateSamples
+    selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusyPrivateSamples + QCD
 elif cutFlow == 'SingleMu':
-    selectedComponents = WJetsToLNu + TTbar
+    selectedComponents = WJetsToLNu + TTbar + QCD
 elif cutFlow == 'DoubleMu':
-    selectedComponents = DYJetsToLL
+    selectedComponents = DYJetsToLL + QCD
 elif cutFlow == 'SinglePhoton':
-    selectedComponents = GJets
+    selectedComponents = GJets + QCD
 else:
     selectedComponents.extend( mcSamples )
 
@@ -129,7 +131,7 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 1
+test = 0
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
