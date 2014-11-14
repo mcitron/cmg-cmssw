@@ -25,27 +25,46 @@ DYJetsMuMuM50pythia8_PU20bx25 = kreator.makeMCComponent("DYJetsMuMuM50pythia8_PU
 DYJetsEEpythia8_PU20bx25 = kreator.makeMCComponent("DYJetsEEpythia8_PU20bx25", "/DYToEE_Tune4C_13TeV-pythia8/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
 DYJetsMuMupythia8_PU20bx25 = kreator.makeMCComponent("DYJetsMuMupythia8_PU20bx25", "/DYToMuMu_Tune4C_13TeV-pythia8/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
 DYJetsToLL_PU20bx25 = [
-DYJetsToLL_PU20bx25_single,
+#DYJetsToLL_PU20bx25_single,
 DYJetsM50_PU20bx25,
-DYJetsM50pythia6_PU20bx25,
+#DYJetsM50pythia6_PU20bx25,
 DYJetsM50_HT200to400_PU20bx25,
 DYJetsM50_HT400to600_PU20bx25,
 DYJetsM50_HT600toInf_PU20bx25,
-DYJetsMuMuM50_PtZ180_PU20bx25,
-DYJetsMuMuM6pythia8_PU20bx25, 
-DYJetsMuMuM15pythia8_PU20bx25,
-DYJetsMuMuM50pythia8_PU20bx25,
-DYJetsEEpythia8_PU20bx25,
-DYJetsMuMupythia8_PU20bx25,
+#DYJetsMuMuM50_PtZ180_PU20bx25,
+#DYJetsMuMuM6pythia8_PU20bx25, 
+#DYJetsMuMuM15pythia8_PU20bx25,
+#DYJetsMuMuM50pythia8_PU20bx25,
+#DYJetsEEpythia8_PU20bx25,
+#DYJetsMuMupythia8_PU20bx25,
 ]
 
 #Components for TTbar
 TTbar_PU20bx25_single = kreator.makeMCComponent("TTbar_PU20bx25","/TT_Tune4C_13TeV-pythia8-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM","CMS","*.root")
+TTJets_PU20bx25 = kreator.makeMCComponent("TTJets_PU20bx25", "/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v2/MINIAODSIM", "CMS", ".*root")
 TTbar_PU20bx25 =[
-TTbar_PU20bx25_single
+TTJets_PU20bx25
 ]
 
+#Components for GJets
+GJet_PU20bx25 = kreator.makeMCComponent("GJet_PU20bx25", "/GJet_Pt-15to3000_Tune4C_13TeV_pythia8/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
+GJets_PU20bx25 = [
+        GJet_PU20bx25
+        ]
 
+#Components for W+Jets
+WJets_PU20bx25_single = kreator.makeMCComponent("WJets_PU20bx25", "/W1234JetsToLNu_Tune4C_13TeV-madgraph-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
+WJetsToLNu_PU20bx25=[
+WJets_PU20bx25_single 
+        ]
+
+#Susy signal
+T1tttt_PU20bx25 = kreator.makeMCComponent("T1tttt_PU20bx25", "/SMS-T1tttt_2J_mGl-1200_mLSP-800_Tune4C_13TeV-madgraph-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
+T2tt_PU20bx25_mStop_425_mLSP_325 = kreator.makeMCComponent("T2tt_mStop_425_mLSP_325","/SMS-T2tt_2J_mStop-425_mLSP-325_Tune4C_13TeV-madgraph-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v1/MINIAODSIM", "CMS", ".*root")
+SusySignalSamples_PU20bx25=[
+        T1tttt_PU20bx25, 
+        T2tt_PU20bx25_mStop_425_mLSP_325 
+        ]
 #=========================================================================================================
 
 #===========================================PU40bx50 (PU_S14)============================================
@@ -68,7 +87,7 @@ QCD_Pt15to30_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("QCD_Pt15to30_P
 QCD_Pt170to300_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("QCD_Pt170to300_PU_S14_POSTLS170", "/QCD_Pt-170to300_Tune4C_13TeV_pythia8/phys_susy-miniAODforSusy_QCD_Pt-170to300_Tune4C_13TeV_pythia8_Spring14dr-PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
 QCD = [
 QCD_Pt1000to1400_PU_S14_POSTLS170,
-QCD_Pt10to15_PU_S14_POSTLS170,
+#QCD_Pt10to15_PU_S14_POSTLS170,
 QCD_Pt120to170_PU_S14_POSTLS170,
 QCD_Pt1400to1800_PU_S14_POSTLS170,
 QCD_Pt1800_PU_S14_POSTLS170,
@@ -76,11 +95,11 @@ QCD_Pt300to470_PU_S14_POSTLS170,
 QCD_Pt30to50_PU_S14_POSTLS170,
 QCD_Pt470to600_PU_S14_POSTLS170,
 QCD_Pt50to80_PU_S14_POSTLS170,
-QCD_Pt5to10_PU_S14_POSTLS170,
+#QCD_Pt5to10_PU_S14_POSTLS170,
 QCD_Pt600to800_PU_S14_POSTLS170,
 QCD_Pt800to1000_PU_S14_POSTLS170,
 QCD_Pt80to120_PU_S14_POSTLS170,
-QCD_Pt15to30_PU_S14_POSTLS170,
+#QCD_Pt15to30_PU_S14_POSTLS170,
 QCD_Pt170to300_PU_S14_POSTLS170,
     ]
 
@@ -148,7 +167,7 @@ SMS_T1qqqq_2J_mGl1400_mLSP100_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponen
 SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170", "/SMS-T1tttt_2J_mGl-1200_mLSP-800_Tune4C_13TeV-madgraph-tauola/phys_susy-miniAODforSusy_SMS-T1tttt_2J_mGl-1200_mLSP-800_Tune4C_13TeV-madgraph-tauola_PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
 SMS_T1tttt_2J_mGl1500_mLSP100_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("SMS_T1tttt_2J_mGl1500_mLSP100_PU_S14_POSTLS170", "/SMS-T1tttt_2J_mGl-1500_mLSP-100_Tune4C_13TeV-madgraph-tauola/phys_susy-miniAODforSusy_SMS-T1tttt_2J_mGl-1500_mLSP-100_Tune4C_13TeV-madgraph-tauola_PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
 
-SusyPrivateSamples = [
+SusySignalSamples = [
     SMS_T1bbbb_2J_mGl1000_mLSP900_PU_S14_POSTLS170,
     SMS_T1bbbb_2J_mGl1500_mLSP100_PU_S14_POSTLS170,
     SMS_T1qqqq_2J_mGl1000_mLSP800_PU_S14_POSTLS170,
@@ -159,9 +178,9 @@ SusyPrivateSamples = [
 #===========================================================================
 
 #Combine different samples for running, modify to configure which sample you want to use
-mcSamples = WJetsToLNu+DYJetsToLL_PU20bx25+ZJetsToNuNu+GJets+TTbar_PU20bx25+QCD+TTBar+DYJetsToLL+SusyPrivateSamples
-mcSamples_PU20bx25 = DYJetsToLL_PU20bx25+TTbar_PU20bx25
-mcSamples_PU40bx50 =  WJetsToLNu+ZJetsToNuNu+GJets+QCD+TTBar+SusyPrivateSamples
+mcSamples = WJetsToLNu+DYJetsToLL_PU20bx25+ZJetsToNuNu+GJets+TTbar_PU20bx25+QCD+TTBar+DYJetsToLL+SusySignalSamples + SusySignalSamples_PU20bx25+WJetsToLNu_PU20bx25 + GJets_PU20bx25
+mcSamples_PU20bx25 = DYJetsToLL_PU20bx25+TTbar_PU20bx25+SusySignalSamples_PU20bx25+WJetsToLNu_PU20bx25 + GJets_PU20bx25 
+mcSamples_PU40bx50 =  WJetsToLNu+ZJetsToNuNu+DYJetsToLL+GJets+QCD+TTBar+SusySignalSamples
 
 dataDir = os.environ['CMSSW_BASE']+"/src/CMGTools/TTHAnalysis/data"
 

@@ -10,10 +10,14 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 ## Signal or control sample
 ##------------------------------------------
 
+#PU regime
+puRegime = 'PU40bx50'
+#puRegime = 'PU20bx25'
+
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-#cutFlow = 'DoubleMu'
-cutFlow = 'SinglePhoton'
+cutFlow = 'DoubleMu'
+#cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
@@ -103,15 +107,32 @@ from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 selectedComponents = []
 
 if cutFlow == 'Signal':
-    selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusyPrivateSamples + QCD
+    if puRegime == 'PU40bx50':
+        selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusySignalSamples + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = WJetsToLNu_PU20bx25 + TTbar_PU20bx25 + SusySignalSamples_PU20bx25
+
 elif cutFlow == 'SingleMu':
-    selectedComponents = WJetsToLNu + TTbar + QCD
+    if puRegime == 'PU40bx50':
+        selectedComponents = WJetsToLNu + TTbar + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = WJetsToLNu_PU20bx25 + TTbar_PU20bx25
+
 elif cutFlow == 'DoubleMu':
-    selectedComponents = DYJetsToLL + QCD
+    if puRegime == 'PU40bx50':
+        selectedComponents = DYJetsToLL + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = DYJetsToLL_PU20bx25
+
 elif cutFlow == 'SinglePhoton':
-    selectedComponents = GJets + QCD
+    if puRegime == 'PU40bx50':
+        selectedComponents = GJets + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = GJets_PU20bx25 
+
 else:
-    selectedComponents.extend( mcSamples )
+    print 'Please choose correct cutFlow and PU regime'
+    #selectedComponents.extend( mcSamples )
 
 #-------- SEQUENCE
 
