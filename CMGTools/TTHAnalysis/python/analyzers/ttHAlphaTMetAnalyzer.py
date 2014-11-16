@@ -30,10 +30,7 @@ class ttHAlphaTMetAnalyzer( Analyzer ):
     def declareHandles(self):
         super(ttHAlphaTMetAnalyzer, self).declareHandles()
         self.handles['met'] = AutoHandle( 'slimmedMETs', 'std::vector<pat::MET>' )
-        self.handles['muons'] = AutoHandle(self.cfg_ana.muons,"std::vector<pat::Muon>") 
         self.handles['nopumet'] = AutoHandle( 'slimmedMETs', 'std::vector<pat::MET>' )
-        self.handles['cmgCand'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
-        self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
 
     def beginLoop(self):
         super(ttHAlphaTMetAnalyzer,self).beginLoop()
@@ -44,11 +41,13 @@ class ttHAlphaTMetAnalyzer( Analyzer ):
     def makeMETNoMu(self, event):
         event.metNoMu = copy.deepcopy(self.handles['met'].product()[0])
         event.metNoMuNoPU = copy.deepcopy(self.handles['nopumet'].product()[0])
-
+        
+        mupx = 0
+        mupy = 0
         #sum muon momentum
         for mu in event.selectedMuons:
-            mupx = mupx+mu.px()
-            mupy = mupy+mu.py()
+            mupx += mu.px()
+            mupy += mu.py()
 
         #subtract muon momentum and construct met
         if hasattr(event, 'deltaMetFromJetSmearing'):

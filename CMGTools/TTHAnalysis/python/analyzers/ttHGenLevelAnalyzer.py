@@ -71,7 +71,11 @@ class ttHGenLevelAnalyzer( Analyzer ):
             dau.sourceId = sourceId
             dau.isTau = isTau
             id = abs(dau.pdgId())
-            moid = abs(dau.mother().pdgId())
+            if(dau.mother() ):
+                moid = abs(dau.mother().pdgId())
+            else:
+                moid='None'
+                print 'Warning: no mother id for gen lepton'
             if id in [11,13]:
                 if isTau: event.gentauleps.append(dau)
                 else:     event.genleps.append(dau)
