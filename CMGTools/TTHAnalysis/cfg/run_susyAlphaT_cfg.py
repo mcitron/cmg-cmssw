@@ -16,8 +16,8 @@ puRegime = 'PU40bx50'
 
 #cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
-cutFlow = 'DoubleMu'
-#cutFlow = 'SinglePhoton'
+#cutFlow = 'DoubleMu'
+cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
@@ -52,7 +52,7 @@ elif cutFlow=='SinglePhoton':
     ttHPhotonSkim.maxObjects  = 1 
     ttHAlphaTSkim.alphaTCuts = [(0.55, 375,99999 )]   
     ttHAlphaTControlSkim.photonDeltaRCut = 1.0
-    mhtDivMetCut = ('mhtJet50j','met',999) #MHT/MET cut
+    ttHAlphaTSkim.mhtDivMetCut = ('mhtJet50j','met',9999) #MHT/MET cut
 
 elif cutFlow=='SingleEle':
     ttHElectronSkim.minObjects  = 1
@@ -159,7 +159,7 @@ test = 0
 if test==1:
     comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
     if cutFlow == 'SinglePhoton':
-        comp = GJets_HT400to600_PU_S14_POSTLS170  
+        comp = GJets_HT600toInf_PU_S14_POSTLS170  
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
