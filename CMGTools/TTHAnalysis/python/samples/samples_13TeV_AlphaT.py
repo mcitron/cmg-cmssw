@@ -118,7 +118,7 @@ DYJetsM50_HT600toInf_PU_S14_POSTLS170,
 
 #Components for TTBar
 TTJets_MSDecaysCKM_central_PU_S14_POSTLS170 = kreator.makeMyPrivateMCComponent("TTJets_MSDecaysCKM_central_PU_S14_POSTLS170", "/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/phys_susy-miniAODforSusy_TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Spring14dr_PU_S14_POSTLS170-af38aa319b7b7c91a6797b31c3be19b7/USER", "PRIVATE", ".*root", "phys03")
-TTBar=[
+TTbar=[
     TTJets_MSDecaysCKM_central_PU_S14_POSTLS170         
     ]
 
@@ -178,9 +178,9 @@ SusySignalSamples = [
 #===========================================================================
 
 #Combine different samples for running, modify to configure which sample you want to use
-mcSamples = WJetsToLNu+DYJetsToLL_PU20bx25+ZJetsToNuNu+GJets+TTbar_PU20bx25+QCD+TTBar+DYJetsToLL+SusySignalSamples + SusySignalSamples_PU20bx25+WJetsToLNu_PU20bx25 + GJets_PU20bx25
+mcSamples = WJetsToLNu+DYJetsToLL_PU20bx25+ZJetsToNuNu+GJets+TTbar_PU20bx25+QCD+TTbar+DYJetsToLL+SusySignalSamples + SusySignalSamples_PU20bx25+WJetsToLNu_PU20bx25 + GJets_PU20bx25
 mcSamples_PU20bx25 = DYJetsToLL_PU20bx25+TTbar_PU20bx25+SusySignalSamples_PU20bx25+WJetsToLNu_PU20bx25 + GJets_PU20bx25 
-mcSamples_PU40bx50 =  WJetsToLNu+ZJetsToNuNu+DYJetsToLL+GJets+QCD+TTBar+SusySignalSamples
+mcSamples_PU40bx50 =  WJetsToLNu+ZJetsToNuNu+DYJetsToLL+GJets+QCD+TTbar+SusySignalSamples
 
 dataDir = os.environ['CMSSW_BASE']+"/src/CMGTools/TTHAnalysis/data"
 

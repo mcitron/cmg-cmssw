@@ -14,10 +14,10 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 puRegime = 'PU40bx50'
 #puRegime = 'PU20bx25'
 
-#cutFlow = 'Signal'
+cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
 #cutFlow = 'DoubleMu'
-cutFlow = 'SinglePhoton'
+#cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
 #cutFlow = 'MultiJetEnriched'
