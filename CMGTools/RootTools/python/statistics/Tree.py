@@ -19,7 +19,7 @@ class Tree(object):
         if ltype.startswith('int'): return 'I'
         elif ltype.startswith('float'): return 'F'
         elif ltype.startswith('double'): return 'D'
-        elif ltype.startswith('double'): return 'O'
+        elif ltype.startswith('bool'): return 'O'
         else: return None 
             
     def addVar(self, type, name):
