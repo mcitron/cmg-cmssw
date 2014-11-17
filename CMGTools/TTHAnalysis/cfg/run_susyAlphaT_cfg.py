@@ -10,6 +10,10 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 ## Signal or control sample
 ##------------------------------------------
 
+#PU regime
+puRegime = 'PU40bx50'
+#puRegime = 'PU20bx25'
+
 cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
 #cutFlow = 'DoubleMu'
@@ -42,11 +46,13 @@ elif cutFlow=='DoubleMu':
     ttHAlphaTControlSkim.lepDeltaRCut = 0.5
 
 elif cutFlow=='SinglePhoton':
+    ttHPhoAna.ptMin = 165
+    ttHPhoAna.etaMax = 1.45
     ttHPhotonSkim.minObjects  = 1
-    ttHPhotonSkim.maxObjects  = 9999
-    ttHPhotonSkim.idCut = "abs(object.eta()) < 1.45" #uses the object skimmer
-    ttHPhotonSkim.ptCuts = [165]
-    ttHAlphaTControlSkim.photonDeltaRCut = 0.5
+    ttHPhotonSkim.maxObjects  = 1 
+    ttHAlphaTSkim.alphaTCuts = [(0.55, 375,99999 )]   
+    ttHAlphaTControlSkim.photonDeltaRCut = 1.0
+    ttHAlphaTSkim.mhtDivMetCut = ('mhtJet50j','met',9999) #MHT/MET cut
 
 elif cutFlow=='SingleEle':
     ttHElectronSkim.minObjects  = 1
@@ -95,40 +101,38 @@ treeProducer = cfg.Analyzer(
         )
 
 #-------- SAMPLES AND TRIGGERS -----------
-from CMGTools.TTHAnalysis.samples.samples_13TeV_CSA14 import *
+# from CMGTools.TTHAnalysis.samples.samples_13TeV_CSA14 import *
+from CMGTools.TTHAnalysis.samples.samples_13TeV_AlphaT import *
 
-# CSA13 PU20bx25 samples: DYJetsM50_PU20bx25, DYJetsM50pythia6_PU20bx25, DYJetsM50_HT200to400_PU20bx25, DYJetsM50_HT400to600_PU20bx25, DYJetsM50_HT600toInf_PU20bx25, DYJetsMuMuM50_PtZ180_PU20bx25, DYJetsMuMuM6pythia8_PU20bx25, DYJetsMuMuM15pythia8_PU20bx25, DYJetsMuMuM50pythia8_PU20bx25, DYJetsEEpythia8_PU20bx25, DYJetsMuMupythia8_PU20bx25, EWKWmin_PU20bx25, EWKWplus_PU20bx25, EWKZjj_PU20bx25, EleGun_PU20bx25, GGHTauTau_PU20bx25, GGHZZ4L_PU20bx25, GJet_PU20bx25, JPsiPt20_PU20bx25, JPsiPt7_PU20bx25, MinBias_PU20bx25, MuMinGunPt100_PU20bx25, MuMinGunPt10_PU20bx25, MuPlusGunPt100_PU20bx25, MuPlusGunPt10_PU20bx25, NeutrinoGun_PU20bx25, QCDEM_20to30_PU20bx25, QCDEM_30to80_PU20bx25, QCDEM_80to170_PU20bx25, QCDMu_20to30_PU20bx25, QCDMu_30to50_PU20bx25, QCDMu_50to80_PU20bx25, QCDMu_80to120_PU20bx25, QCDMu_pythia6_120to170_PU20bx25, QCDMu_pythia6_20to30_PU20bx25, QCDMu_pythia6_30to50_PU20bx25, QCDMu_pythia6_50to80_PU20bx25, QCDMu_pythia6_80to120_PU20bx25, T1tttt_PU20bx25, TTHBB_PU20bx25, TTHGG_PU20bx25, TTHTauTau_PU20bx25, TTHWW_PU20bx25, TTHZZ4L_PU20bx25, TTJets_PU20bx25, TTJets_PUS14, TTpythia8_PU20bx25, VBFHBB_PU20bx25, VBFHGG_PU20bx25, VBFHWWSemi_PU20bx25, VBFHWW_PU20bx25, VBFHZG_PU20bx25, VBFHZZ4L_PU20bx25, VHMuMu_PU20bx25, VHTauTau_PU20bx25, VHWWInc_PU20bx25, VHWWLep_PU20bx25, VHZZ4L_PU20bx25, WENupyhia8_PU20bx25, WJets_PU20bx25, WminTau_PU20bx25, WplusMu_PU20bx25, WplusTau_PU20bx25, ZHBBInv_PU20bx25, ZHBBLL_PU20bx25, ZHLLInv_PU20bx25
-
-
-
-# Selected samples as defined on the AlphaT twiki
-WJetsToLNu   = [ WJetsToLNu_HT100to200_PU_S14_POSTLS170, WJetsToLNu_HT200to400_PU_S14_POSTLS170, WJetsToLNu_HT400to600_PU_S14_POSTLS170, WJetsToLNu_HT600toInf_PU_S14_POSTLS170]
-
-# Currently not defined in the samples file could be added from here: https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2F*DYJetsToLL*13TeV*%2F*PU20bx25*%2F*AODSIM
-#DYJetsToLL  = []
-# Currently not defined in the samples file could be added from here: https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2F*ZJetsToNuNu*13TeV*%2F*PU20bx25*%2F*AODSIM
-#ZJetsToNuNu = []
-# https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2F*GJets*13TeV*%2F*PU20bx25*%2F*AODSIM
-#GJets       = []
-
-# NOT INCLUDING: /TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/Spring14miniaod-PU20bx25_POSTLS170_V5-v2/MINIAODSIM
-TTbar        = [ TTpythia8_PU20bx25 ]
-# https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2FTToBLNu*13TeV*%2FSpring*PU20bx25*%2F*AODSIM
-#TToBLNu     = []
-# https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2FSMS-T1qqqq*13TeV*%2FSpring*PU20bx25*%2F*AODSIM
-#T1qqqq       = []
-# https://cmsweb.cern.ch/das/request?view=list&limit=100&instance=prod%2Fglobal&input=dataset%3D%2FSMS-T1bbbb*13TeV*%2FSpring*PU20bx25*%2F*AODSIM
-#T1bbbb       = []
-T1tttt       = [ T1tttt_PU20bx25 ]
-
-
-selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
 selectedComponents = []
-selectedComponents.extend( WJetsToLNu )
-selectedComponents.extend( TTbar )
 
+if cutFlow == 'Signal':
+    if puRegime == 'PU40bx50':
+        selectedComponents = WJetsToLNu + ZJetsToNuNu + TTbar + SusySignalSamples + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = WJetsToLNu_PU20bx25 + TTbar_PU20bx25 + SusySignalSamples_PU20bx25
 
+elif cutFlow == 'SingleMu':
+    if puRegime == 'PU40bx50':
+        selectedComponents = WJetsToLNu + TTbar + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = WJetsToLNu_PU20bx25 + TTbar_PU20bx25
 
+elif cutFlow == 'DoubleMu':
+    if puRegime == 'PU40bx50':
+        selectedComponents = DYJetsToLL + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = DYJetsToLL_PU20bx25
+
+elif cutFlow == 'SinglePhoton':
+    if puRegime == 'PU40bx50':
+        selectedComponents = GJets + QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = GJets_PU20bx25 
+
+else:
+    print 'Please choose correct cutFlow and PU regime'
+    #selectedComponents.extend( mcSamples )
 
 #-------- SEQUENCE
 
@@ -148,16 +152,14 @@ sequence = cfg.Sequence(susyCoreSequence + [
 
 
 #-------- HOW TO RUN
-test = 4
+test = 0
 
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
-    comp               = T1tttt_PU20bx25
-    if cutFlow == 'Test':
-        comp = VBFHGG_PU20bx25 
+    comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
     if cutFlow == 'SinglePhoton':
-        comp = VBFHGG_PU20bx25 
+        comp = GJets_HT600toInf_PU_S14_POSTLS170  
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
     comp.files         = comp.files[:2]
     
@@ -169,14 +171,15 @@ if test==1:
 #--------------------------------------------------
 elif test==2:
     for comp in selectedComponents:
-        comp.splitFactor = 1
+        comp.splitFactor = 4
         comp.files       = comp.files[:1]
 #--------------------------------------------------
+
 
 # Run on local files
 #--------------------------------------------------
 elif test==4:
-    comp = TTJets_PU20bx25
+    comp = TTbar_PU20bx25 
 
 #    comp.name = 'TTJets'
     #    comp.files = [ '/store/mc/Spring14miniaod/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/063013AD-9907-E411-8135-0026189438BD.root' ]
@@ -186,7 +189,7 @@ elif test==4:
     selectedComponents = [comp]
     comp.splitFactor = 1
 #--------------------------------------------------
-
+    
 
 config = cfg.Config( components = selectedComponents,
                      sequence = sequence )
