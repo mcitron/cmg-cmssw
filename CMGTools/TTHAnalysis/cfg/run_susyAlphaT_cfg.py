@@ -14,13 +14,13 @@ from CMGTools.TTHAnalysis.analyzers.susyAlphaTCore_cfg import *
 puRegime = 'PU40bx50'
 #puRegime = 'PU20bx25'
 
-cutFlow = 'Signal'
+#cutFlow = 'Signal'
 #cutFlow = 'SingleMu'
 #cutFlow = 'DoubleMu'
 #cutFlow = 'SinglePhoton'
 #cutFlow = 'SingleEle'
 #cutFlow = 'DoubleEle'
-#cutFlow = 'MultiJetEnriched'
+cutFlow = 'MultiJetEnriched'
 # cutFlow = 'Test'
 
 if cutFlow=='SingleMu':
@@ -130,6 +130,12 @@ elif cutFlow == 'SinglePhoton':
     elif puRegime == 'PU20bx25':
         selectedComponents = GJets_PU20bx25 
 
+elif cutFlow == 'MultiJetEnriched':
+    if puRegime == 'PU40bx50':
+        selectedComponents = QCD
+    elif puRegime == 'PU20bx25':
+        selectedComponents = 'None' 
+
 else:
     print 'Please choose correct cutFlow and PU regime'
     #selectedComponents.extend( mcSamples )
@@ -157,7 +163,8 @@ test = 0
 # Test a single component, using a single thread.
 #--------------------------------------------------
 if test==1:
-    comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
+    #comp               = SMS_T1tttt_2J_mGl1200_mLSP800_PU_S14_POSTLS170
+    comp = QCD_Pt1000to1400_PU_S14_POSTLS170
     if cutFlow == 'SinglePhoton':
         comp = GJets_HT600toInf_PU_S14_POSTLS170  
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
@@ -170,6 +177,7 @@ if test==1:
 # Test all components (1 thread per component).
 #--------------------------------------------------
 elif test==2:
+    selectedComponents=QCD
     for comp in selectedComponents:
         comp.splitFactor = 4
         comp.files       = comp.files[:1]
